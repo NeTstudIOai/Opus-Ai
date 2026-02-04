@@ -162,32 +162,37 @@ function sendFeedback() {
     const input = document.getElementById("feedback");
     const feedback = input.value.trim();
 
-    if (!feedback) {
-        alert("Please enter feedback.");
+    if (feedback.length === 0) {
+        alert("Please enter feedback");
         return;
     }
 
     if (feedback.length > 20) {
-        alert("Feedback must be 20 characters or less.");
+        alert("Max 20 characters only");
         return;
     }
 
     emailjs.send(
-        "service_bhwqw6l",   // ✅ your service ID
-        "template_0iwq4o7",  // ✅ your template ID
-        { message: feedback }
+        "service_bhwqw6l",
+        "template_0iwq4o7",
+        {
+            name: "Website User",
+            message: feedback,
+            time: new Date().toLocaleString()
+        }
     )
     .then(() => {
-        alert("Feedback sent successfully ✅");
+        alert("Feedback sent ✅");
         input.value = "";
     })
     .catch(err => {
         console.error("EmailJS Error:", err);
-        alert("Failed to send feedback ❌");
+        alert("Failed to send ❌");
     });
 }
 </script>
 
 
 </body>
+
 </html>
