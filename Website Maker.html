@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Net ai | Website maker</title>
+<link rel="stylesheet" href="Style.css">
+</head>
+<body class="dark">
+
+<div id="loader">
+    <div class="bar-container">
+        <div class="bar"></div>
+    </div>
+</div>
+
+
+<nav>
+    <h2>Net AI</h2>
+    <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#Information">Information</a>
+        <a href="#Documantation">Documantation</a>
+        <a href="#Versons" style="margin-right:0;">Versons</a>
+    </div>
+</nav>
+
+<button id="modeToggle">☀</button>
+
+<div class="hero">
+    <div class="hero-content">
+        <h1>NetStudioAi</h1>
+        <p>Create Your Own Website</p>
+        
+    </div>
+</div>
+
+<div class="carousel">
+  <div class="track">
+    <div class="item">1</div>
+    <div class="item">2</div>
+    <div class="item">3</div>
+    <div class="item">4</div>
+    <div class="item">5</div>
+    <div class="item">6</div>
+    <div class="item">7</div>
+    <!-- duplicate  -->
+    <div class="item">1</div>
+    <div class="item">2</div>
+    <div class="item">3</div>
+    <div class="item">4</div>
+    <div class="item">5</div>
+    <div class="item">6</div>
+    <div class="item">7</div>
+  </div>  
+</div>
+
+    <!-- duplicate   <div class="item">
+        <img src="https://cdn.freebiesupply.com/logos/thumbs/2x/html5-2-logo.png" alt="" height="50px" width="50px">
+        HTML</div> -->
+
+<section class="info" id="about">
+    <p>
+        NetStudioAi is an official <strong>Roblox Redeem Code Platform</strong> for our game.
+        Players can redeem codes here, then join the Roblox game to instantly receive rewards like money, boosts, and items.
+        This system helps keep codes secure and easy to manage.
+    </p>
+</section>
+
+<section class="button-area">
+    <button class="btn">ℹ|Information</button>
+    <button class="btn">Documantation</button>
+    <button class="btn">⚠|Report Bug</button>
+    <button class="btn">🜲|Upgrade</button>
+</section>
+
+<div class="Container">
+    <div class="CenterBord">
+        <h1><b>Welcome!</b></h1>
+        <p>This is a test page served by a Python server.</p>
+    </div>
+    <div class="CenterBord">
+        <h1><b>Welcome!</b></h1>
+        <p>This is a test page served by a Python server.</p>
+    </div>
+    <div class="CenterBord">
+        <h1><b>Welcome!</b></h1>
+        <p>This is a test page served by a Python server.</p>
+    </div>
+    <div class="CenterBord">
+        <h1><b>Welcome!</b></h1>
+        <p>This is a test page served by a Python server.</p>
+    </div>
+        <div class="CenterBord">
+        <h1><b>Welcome!</b></h1>
+        <p>This is a test page served by a Python server.</p>
+    </div>
+    <div class="CenterBord">
+        <h1><b>Welcome!</b></h1>
+        <p>This is a test page served by a Python server.</p>
+    </div>
+</div>
+
+<section class="info" id="redeem" style="margin-top:20px;">
+    <h2>Send Feedback!</h2>
+    <p>Enter your feedback below. After entering, Press send button below.</p>
+    <div style="margin-top:20px;">
+        <input type="text" placeholder="Enter feedback" style="padding:15px 20px;border-radius:12px;border:none;font-size:1.1rem;width:260px;max-width:80%;">
+        <br><br>
+        <button class="btn" style="width:200px;height:70px;font-size:1.1rem;">Send</button>
+    </div>
+</section>
+
+<div class="links">
+    <a href="#"><i class="fa-brands fa-discord"></i> Discord</a>
+    <a href="#"><i class="fa-brands fa-youtube"></i> YouTube</a>
+    <a href="#"><i class="fa-brands fa-x-twitter"></i> Twitter</a>
+</div>
+
+<footer>
+    © 2025 NetStudioAi — All Rights Reserved
+</footer>
+
+<!-- EmailJS library -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<script>
+/* =========================
+   THEME TOGGLE
+   ========================= */
+const body = document.body;
+const toggle = document.getElementById("modeToggle");
+
+toggle.addEventListener("click", () => {
+    if (body.classList.contains("dark")) {
+        body.classList.replace("dark", "light");
+        toggle.innerText = "◑";
+    } else {
+        body.classList.replace("light", "dark");
+        toggle.innerText = "☀";
+    }
+});
+
+/* =========================
+   LOADER
+   ========================= */
+setTimeout(() => {
+    document.getElementById("loader").style.display = "none";
+}, 1250);
+
+/* =========================
+   EMAILJS INIT
+   ========================= */
+(function () {
+    emailjs.init("iOF-ynEbUsmj6q_XM"); // 🔴 PUT PUBLIC KEY HERE
+})();
+
+/* =========================
+   SEND FEEDBACK
+   ========================= */
+function sendFeedback() {
+    const input = document.getElementById("feedback");
+    const feedback = input.value.trim();
+
+    if (!feedback) {
+        alert("Please enter feedback.");
+        return;
+    }
+
+    if (feedback.length > 20) {
+        alert("Feedback must be 20 characters or less.");
+        return;
+    }
+
+    emailjs.send(
+        "service_bhwqw6l",   // ✅ your service ID
+        "template_0iwq4o7",  // ✅ your template ID
+        { message: feedback }
+    )
+    .then(() => {
+        alert("Feedback sent successfully ✅");
+        input.value = "";
+    })
+    .catch(err => {
+        console.error("EmailJS Error:", err);
+        alert("Failed to send feedback ❌");
+    });
+}
+</script>
+
+
+</body>
+</html>
