@@ -105,9 +105,9 @@
     <h2>Send Feedback!</h2>
     <p>Enter your feedback below. After entering, Press send button below.</p>
     <div style="margin-top:20px;">
-        <input type="text" placeholder="Enter feedback" style="padding:15px 20px;border-radius:12px;border:none;font-size:1.1rem;width:260px;max-width:80%;">
+        <input type="text" id="feedback" placeholder="Enter feedback" style="padding:15px 20px;border-radius:12px;border:none;font-size:1.1rem;width:260px;max-width:80%;">
         <br><br>
-        <button class="btn" style="width:200px;height:70px;font-size:1.1rem;">Send</button>
+        <button class="btn" onclick="sendFeedback()" style="width:200px;height:70px;font-size:1.1rem;">Send</button>
     </div>
 </section>
 
@@ -128,38 +128,49 @@
 /* =========================
    THEME TOGGLE
    ========================= */
-const body = document.body;
-const toggle = document.getElementById("modeToggle");
+document.addEventListener("DOMContentLoaded", () => {
 
-toggle.addEventListener("click", () => {
-    if (body.classList.contains("dark")) {
-        body.classList.replace("dark", "light");
-        toggle.innerText = "◑";
-    } else {
-        body.classList.replace("light", "dark");
-        toggle.innerText = "☀";
+    const body = document.body;
+    const toggle = document.getElementById("modeToggle");
+
+    if (toggle) {
+        toggle.addEventListener("click", () => {
+            if (body.classList.contains("dark")) {
+                body.classList.replace("dark", "light");
+                toggle.innerText = "◑";
+            } else {
+                body.classList.replace("light", "dark");
+                toggle.innerText = "☀";
+            }
+        });
     }
+
+    /* =========================
+       LOADER
+       ========================= */
+    const loader = document.getElementById("loader");
+    if (loader) {
+        setTimeout(() => {
+            loader.style.display = "none";
+        }, 1250);
+    }
+
+    /* =========================
+       EMAILJS INIT
+       ========================= */
+    emailjs.init("iOF-ynEbUsmj6q_XM"); // ✅ YOUR PUBLIC KEY
 });
-
-/* =========================
-   LOADER
-   ========================= */
-setTimeout(() => {
-    document.getElementById("loader").style.display = "none";
-}, 1250);
-
-/* =========================
-   EMAILJS INIT
-   ========================= */
-(function () {
-    emailjs.init("iOF-ynEbUsmj6q_XM"); // 🔴 PUT PUBLIC KEY HERE
-})();
 
 /* =========================
    SEND FEEDBACK
    ========================= */
 function sendFeedback() {
     const input = document.getElementById("feedback");
+    if (!input) {
+        alert("Feedback input not found");
+        return;
+    }
+
     const feedback = input.value.trim();
 
     if (feedback.length === 0) {
@@ -167,14 +178,14 @@ function sendFeedback() {
         return;
     }
 
-    if (feedback.length > 20) {
-        alert("Max 20 characters only");
+    if (feedback.length < 20) {
+        alert("Minimum 20 characters only");
         return;
     }
 
     emailjs.send(
-        "service_bhwqw6l",
-        "template_0iwq4o7",
+        "service_01u76q5",      // ✅ YOUR SERVICE ID
+        "template_0iwq4o7",     // ✅ YOUR TEMPLATE ID
         {
             name: "Website User",
             message: feedback,
@@ -193,6 +204,6 @@ function sendFeedback() {
 </script>
 
 
-</body>
 
+</body>
 </html>
