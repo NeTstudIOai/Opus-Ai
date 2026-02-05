@@ -19,7 +19,7 @@
 <nav>
     <h2>Opus AI</h2>
     <div class="nav-links">
-        <a href="#">Home</a>
+        <a href="#">Dashbord</a>
         <a href="#Information">Information</a>
         <a href="#Documantation">Documantation</a>
         <a href="#Versons" style="margin-right:0;">Versons</a>
@@ -107,6 +107,10 @@ Just choose what you want, customize the design, and build a website that fits y
 
   <!-- CENTER TEXT -->
   <h1 style="
+          -webkit-user-select: none; /* Chrome, Safari */
+        -moz-user-select: none;    /* Firefox */
+        -ms-user-select: none;     /* Edge */
+        user-select: none;         /* Standard */
     margin: 0;
     flex: 1;
     text-align: center;
@@ -161,7 +165,9 @@ Just choose what you want, customize the design, and build a website that fits y
 </div>
 
 <section class="info" id="redeem" style="margin-top:20px;">
+
     <div class="FeedBackDiv">
+
     <h2>Send Feedback!</h2>
     <p>Enter your feedback below. After entering, Press send button below.</p>
     <div style="margin-top:20px;">
@@ -240,7 +246,7 @@ function sendFeedback() {
     }
 
     if (feedback.length < 20) {
-        alert("Minimum 20 characters only");
+        alert("Minimum 20 characters is required.");
         return;
     }
 
@@ -248,7 +254,7 @@ function sendFeedback() {
         "service_01u76q5",      // ✅ YOUR SERVICE ID
         "template_0iwq4o7",     // ✅ YOUR TEMPLATE ID
         {
-            name: "Website User",
+            name: "Opus Ai's user (NSA.opusai)",
             message: feedback,
             time: new Date().toLocaleString()
         }
@@ -259,7 +265,7 @@ function sendFeedback() {
     })
     .catch(err => {
         console.error("EmailJS Error:", err);
-        alert("Failed to send ❌");
+        alert("Failed to send ❌, Try again later");
     });
 }
 </script>
