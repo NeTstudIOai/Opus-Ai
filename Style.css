@@ -31,6 +31,10 @@
     }
 
     nav {
+        -webkit-user-select: none; /* Chrome, Safari */
+        -moz-user-select: none;    /* Firefox */
+        -ms-user-select: none;     /* Edge */
+        user-select: none;         /* Standard */
         max-width: 100%;
         margin: 0 auto;
         background: var(--bg);
@@ -96,6 +100,10 @@
     .hero-content {
         position: relative;
         z-index: 2;
+        -webkit-user-select: none; /* Chrome, Safari */
+        -moz-user-select: none;    /* Firefox */
+        -ms-user-select: none;     /* Edge */
+        user-select: none;         /* Standard */
     }
 
     .hero-content h1 {
@@ -132,9 +140,7 @@
         background-position: center;         /* 👈 center it */
     }
 
-    .FeedBackDiv {
-        transform: rotate3d(deg,0deg,0deg);
-    }
+
 
     .button-area {
         text-align: center;
@@ -501,6 +507,10 @@
         border-style: solid;
 }
 .Goldenbtn:hover {
+        -webkit-user-select: none; /* Chrome, Safari */
+        -moz-user-select: none;    /* Firefox */
+        -ms-user-select: none;     /* Edge */
+        user-select: none;         /* Standard */
         margin-top: 0px;
         color: transparent;
         text-shadow: 0 0 0 gold;
