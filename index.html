@@ -1,147 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="icon" type="image/png" href="https://github.com/NeTstudIOai/Opus-Ai/blob/main/NET%20(2).png?raw=true">
-  <title>NetStudioAI | Opus branch</title>
-  <meta name="description" content="NetStudio AI is an AI-powered tool that converts text prompts into complete websites instantly. No coding required." />
-  <meta name="robots" content="index, follow" />
-  <meta property="og:site_name" content="NetStudio AI">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+<title>NetStudioAI | Opus Branch</title>
+<meta name="description" content="NetStudio AI is an AI-powered tool that converts text prompts into complete websites instantly. No coding required." />
+<meta name="robots" content="index, follow" />
 
-    body {
-      background: #0f0f0f;
-      color: #ffffff;
-      line-height: 1.6;
-    }
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
 
-    /* NAV */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 40px;
-      background: #000;
-    }
+body{
+    background:#0d1117; /* Dark grey like ChatGPT */
+    color:#e6edf3;
+    line-height:1.6;
+    overflow-x:hidden;
+}
 
-    .logo {
-      font-size: 1.6rem;
-      font-weight: bold;
-    }
+/* NAV */
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 60px;
+    background:rgba(13,17,23,0.8);
+    backdrop-filter:blur(10px);
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
 
-    .logo span {
-      color: #7c6cff;
-    }
+.logo{
+    font-size:1.7rem;
+    font-weight:700;
+}
 
-    nav a {
-      color: #ccc;
-      margin-left: 20px;
-      text-decoration: none;
-      font-size: 0.95rem;
-    }
+.logo span{
+    background:linear-gradient(90deg,#7c6cff,#00e0ff);
+    -webkit-background-clip:text;
+    color:transparent;
+}
 
-    nav a:hover {
-      color: #fff;
-    }
+nav a{
+    color:#8b949e;
+    margin-left:30px;
+    text-decoration:none;
+    transition:0.3s;
+    position:relative;
+}
 
-    /* HERO */
-    .hero {
-      padding: 100px 20px;
-      text-align: center;
-      background: linear-gradient(135deg, #1a1a1a, #000);
-    }
+nav a::after{
+    content:"";
+    position:absolute;
+    width:0%;
+    height:2px;
+    left:0;
+    bottom:-5px;
+    background:#7c6cff;
+    transition:0.3s;
+}
 
-    .hero h1 {
-      font-size: 3rem;
-      margin-bottom: 20px;
-    }
+nav a:hover{
+    color:#fff;
+}
+nav a:hover::after{
+    width:100%;
+}
 
-    .hero p {
-      max-width: 600px;
-      margin: auto;
-      color: #ccc;
-    }
+/* HERO */
+.hero{
+    padding:140px 20px;
+    text-align:center;
+    background: radial-gradient(circle at top,#161b22 0%,#0d1117 60%);
+    animation:fadeIn 1.5s ease;
+}
 
-    .hero button {
-      margin-top: 30px;
-      padding: 12px 30px;
-      border: none;
-      background: #7c6cff;
-      color: white;
-      font-size: 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+.hero h1{
+    font-size:3.5rem;
+    margin-bottom:20px;
+    background:linear-gradient(90deg,#ffffff,#7c6cff,#00e0ff);
+    -webkit-background-clip:text;
+    color:transparent;
+    animation: glow 3s infinite alternate;
+}
 
-    /* SECTIONS */
-    section {
-      padding: 80px 20px;
-      max-width: 1000px;
-      margin: auto;
-    }
+.hero p{
+    max-width:650px;
+    margin:auto;
+    color:#8b949e;
+    font-size:1.1rem;
+}
 
-    section h2 {
-      text-align: center;
-      margin-bottom: 40px;
-      font-size: 2rem;
-    }
+/* BUTTON */
+.hero button{
+    margin-top:40px;
+    padding:14px 40px;
+    border-radius:50px;
+    border:none;
+    font-size:1rem;
+    cursor:pointer;
+    color:white;
+    background:linear-gradient(90deg,#7c6cff,#00e0ff);
+    background-size:200%;
+    transition:0.4s;
+    animation:float 3s ease-in-out infinite;
+}
 
-    /* FEATURES */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
+.hero button:hover{
+    background-position:right;
+    transform:scale(1.05);
+    box-shadow:0 0 25px #7c6cff66;
+}
 
-    .card {
-      background: #1a1a1a;
-      padding: 30px;
-      border-radius: 10px;
-      text-align: center;
-      font-size: 1.1rem;
-    }
+/* SECTIONS */
+section{
+    padding:100px 20px;
+    max-width:1100px;
+    margin:auto;
+}
 
-    /* HOW */
-    .steps {
-      list-style: none;
-      max-width: 600px;
-      margin: auto;
-      color: #ccc;
-    }
+section h2{
+    text-align:center;
+    margin-bottom:60px;
+    font-size:2.3rem;
+    position:relative;
+}
 
-    .steps li {
-      margin-bottom: 15px;
-    }
+section h2::after{
+    content:"";
+    width:60px;
+    height:3px;
+    background:#7c6cff;
+    display:block;
+    margin:15px auto 0;
+    border-radius:10px;
+}
 
-    /* FOOTER */
-    footer {
-      background: #000;
-      text-align: center;
-      padding: 20px;
-      font-size: 0.9rem;
-      color: #aaa;
-    }
+/* CARDS */
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+}
 
-    /* MOBILE */
-    @media (max-width: 600px) {
-      .hero h1 {
-        font-size: 2.2rem;
-      }
+.card{
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,0.08);
+    padding:40px;
+    border-radius:20px;
+    text-align:center;
+    transition:0.4s;
+}
 
-      nav {
-        display: none;
-      }
-    }
-  </style>
+.card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 15px 35px rgba(124,108,255,0.2);
+}
+
+/* HOW STEPS */
+.steps{
+    list-style:none;
+    max-width:600px;
+    margin:auto;
+    color:#8b949e;
+}
+
+.steps li{
+    margin-bottom:20px;
+    padding:15px 20px;
+    background:rgba(255,255,255,0.04);
+    border-radius:15px;
+    transition:0.3s;
+}
+
+.steps li:hover{
+    background:rgba(124,108,255,0.1);
+}
+
+/* FOOTER */
+footer{
+    background:#0b0f14;
+    text-align:center;
+    padding:30px;
+    color:#8b949e;
+    font-size:0.9rem;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn{
+    from{opacity:0;transform:translateY(20px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+@keyframes glow{
+    from{text-shadow:0 0 10px #7c6cff;}
+    to{text-shadow:0 0 25px #00e0ff;}
+}
+
+@keyframes float{
+    0%{transform:translateY(0);}
+    50%{transform:translateY(-8px);}
+    100%{transform:translateY(0);}
+}
+
+/* MOBILE */
+@media(max-width:700px){
+    .hero h1{font-size:2.4rem;}
+    header{padding:20px;}
+    nav{display:none;}
+}
+</style>
 </head>
 
 <body>
@@ -156,14 +233,12 @@
 </header>
 
 <section class="hero">
-  <h1>Turn Text Into Websites with AI</h1>
+  <h1>NetStudioAI</h1>
   <p>
     NetStudio AI (Opus-AI) lets you create complete websites just by describing them in text.
     No coding. No design skills.
   </p>
-  <button onclick="goToPage()">
-  Opus AI
-</button>
+  <button onclick="goToPage()">Launch Opus AI</button>
 </section>
 
 <section id="features">
@@ -172,7 +247,9 @@
     <div class="card">🧠 AI Website Generator</div>
     <div class="card">⚡ Instant Code Output</div>
     <div class="card">📱 Fully Responsive</div>
-    <div class="card">🎨 Clean Modern Design</div>
+    <div class="card">🎨 Clean Modern UI</div>
+    <div class="card">⚡ Fully Free</div>
+    <div class="card">⚡ No delay</div>
   </div>
 </section>
 
@@ -181,25 +258,27 @@
   <ul class="steps">
     <li>1. Describe the website you want</li>
     <li>2. AI understands your idea</li>
-    <li>3. Website code is generated</li>
+    <li>3. Complete website code is generated</li>
     <li>4. Deploy instantly</li>
   </ul>
 </section>
 
 <section id="about">
   <h2>About NetStudio AI</h2>
-  <p style="text-align:center;color:#ccc;max-width:700px;margin:auto;">
-    NetStudio AI (Opus-AI) is a text-to-website AI platform designed to make website creation
-    simple for everyone. Just explain your idea — the AI builds it for you.
+  <p style="text-align:center;color:#8b949e;max-width:700px;margin:auto;">
+    NetStudio AI (Opus-AI) is a next-generation text-to-website AI platform 
+    built to make website creation effortless. Just explain your idea — 
+    the AI builds it beautifully.
   </p>
 </section>
 
 <footer>
-  NetStudioAI · Opus AI 2026
+  © 2026 NetStudioAI · Opus Branch
 </footer>
+
 <script>
-function goToPage() {
-  window.location.href = "dashbord";
+function goToPage(){
+  window.location.href="/dashbord";
 }
 </script>
 
