@@ -9,7 +9,7 @@
     body.light {
         --bg: #f5f5ff;
         --fg: #000115;
-        --primary: #6a5acd;
+        --primary: #7a6cff;
         --secondary: #4a3cff;
         background: linear-gradient(#ffffff, #e8e8ff);
     }
@@ -41,6 +41,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-direction: row;
         padding: 10px 20px;
         box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         position: sticky;
@@ -50,14 +51,31 @@
         backdrop-filter: blur(14px);
     }
 
-    nav h2 {
+    .light nav h2 {
         margin: 0;
         font-size: 1.5rem;
-        color: var(--primary);
+        color: black ;
+    }
+    .dark nav h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: rgb(255, 255, 255) ;
+    }
+    span {
+       color: var(--primary); 
+    }
+
+    .TitleNav {
+        margin: 0;
+        font-size: 1.5rem;
+        color: var(--primary); 
+        display: flex;
+        gap: 5px;
     }
 
     nav .nav-links {
         display: flex;
+        
         gap: 15px;
     }
 
@@ -453,7 +471,6 @@
     background: transparent;
     border: none;
     flex-shrink: 0;
-    transition: all ease 0.25s;
     margin-left: 5px;
 }
 .light .item {
@@ -475,7 +492,6 @@
     background: transparent;
     border: none;
     flex-shrink: 0;
-    transition: all ease 0.25s;
     margin-left: 5px;
 }
 /* PERFECT LOOP */
