@@ -351,48 +351,62 @@
         `).join("");
     }
 
-    function send() {
-        const text = input.value.trim();
-        if (!text || isThinking) return;
+async function send() {
+    const text = input.value.trim();
+    if (!text || isThinking) return;
 
-        add(text, "user");
-        input.value = "";
-        input.disabled = true;
+    if (text.toLowerCase() === lastMsg.toLowerCase()) repeatCount++;
+    else { repeatCount = 0; lastMsg = text; }
 
-        const typingId = addThinking();
-        isThinking = true;
+    isThinking = true;
+    input.disabled = true;
+    sendBtn.style.display = "none";
+    stopBtn.style.display = "block";
 
-        sendBtn.style.display = "none";
-        stopBtn.style.display = "block";
+    add(text, "User");
+    input.value = "";
 
-        // 🔥 CALL FLASK BACKEND
-        fetch("https://YOUR-RENDER-URL.onrender.com/?query=" + encodeURIComponent(text), {
+    const typingId = "typing_" + Date.now();
+    add(`Thinking...`, "AI ThinkingPulse", typingId);
+
+    try {
+        // 🔥 Call Flask backend search
+        const response = await fetch("/search", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: "query=" + encodeURIComponent(text)
-        })
-        .then(res => res.text())
-        .then(html => {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, "text/html");
-            const resultDivs = doc.querySelectorAll(".result");
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query: text })
+        });
 
-            let results = [];
-            resultDivs.forEach(div => {
-                const title = div.querySelector("a")?.innerText;
-                const link = div.querySelector("a")?.href;
-                const snippet = div.querySelector("p")?.innerText;
-                results.push({ title, link, snippet });
+        const results = await response.json();
+
+        const botMessage = document.getElementById(typingId);
+        botMessage.classList.remove("ThinkingPulse");
+
+        let browserResults = "";
+        if (results.length > 0) {
+            browserResults = "<br><br><b>🌐 Browser Results:</b><br>";
+            results.forEach(r => {
+                browserResults += `
+                    <div style="margin:8px 0">
+                        🔗 <a href="${r.link}" target="_blank">${r.title}</a>
+                        <div style="font-size:12px;opacity:0.7">${r.snippet}</div>
+                    </div>`;
             });
+        }
 
-            const botMessage = document.getElementById(typingId);
-            if (botMessage) {
-                botMessage.classList.remove("ThinkingPulse");
-                botMessage.innerHTML = formatResults(results);
-            }
-        })
+        botMessage.innerHTML = reply(text, "Normal") + browserResults;
+
+    } catch (err) {
+        const botMessage = document.getElementById(typingId);
+        botMessage.innerHTML = "⚠️ Error fetching browser results.";
+    }
+
+    isThinking = false;
+    input.disabled = false;
+    sendBtn.style.display = "block";
+    stopBtn.style.display = "none";
+}
+
         .catch(() => {
             const botMessage = document.getElementById(typingId);
             if (botMessage) {
@@ -431,3 +445,4 @@
 
 </body>
 </html>
+
