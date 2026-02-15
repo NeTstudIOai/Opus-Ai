@@ -1,82 +1,433 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Search Engine</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="tab-title">Net AI</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/NeTstudIOai/Net-ai/main/NetAiPng.png" type="image/png">
     <style>
+        :root {
+            --primary-glow: #9900ff;
+            --bg-dark: #0f0f0f;
+            --chat-bg: #1a1a1a;
+            --text-main: #e0e0e0;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --sidebar-bg: rgba(0, 0, 0, 0.6);
+            
+        }
+
+        [data-theme="light"] {
+            --bg-dark: #f0f2f5;
+            --chat-bg: #ffffff;
+            --text-main: #1a1a1a;
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --sidebar-bg: rgba(255, 255, 255, 0.8);
+        }
+
+        * { box-sizing: border-box; transition: background 0.3s, color 0.3s, box-shadow 0.3s; }
+
         body {
-            background-color: #202124;
-            color: white;
-            font-family: Arial;
-            text-align: center;
+            scrollbar-color: black;
+            margin: 0; height: 100vh; display: flex;
+            background: var(--bg-dark);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: var(--text-main); overflow: hidden;
+        }
+        .SettingsTag {
+ 
+            background: rgba(255, 255, 255, 0);
+            transition: all 0.3s ease;
+        }
+        .SettingsTag:hover {
+            background: rgba(255, 255, 255, 0.249);
+            rotate: 45deg;
+        }
+        .SideBar {
+            width: 220px; background: var(--sidebar-bg);
+            backdrop-filter: blur(15px); padding: 25px 15px;
+            border-right: 1px solid var(--glass-border);
+            display: flex; flex-direction: column; gap: 10px;
         }
 
-        h1 {
-            margin-top: 50px;
+        .SideBar h2 {
+            font-size: 22px; margin: 0;
+            background: linear-gradient(90deg, var(--primary-glow), #9d00ff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        input[type="text"] {
-            width: 400px;
-            padding: 10px;
-            border-radius: 25px;
-            border: none;
-            outline: none;
-            font-size: 16px;
+        .SideBar p { cursor: pointer; }
+
+        .Main { flex: 1; display: flex; flex-direction: column; position: relative;  }
+
+        .TopBar {
+            margin: 15px; padding: 12px 25px; border-radius: 15px;
+            background: var(--chat-bg); border: 1px solid var(--glass-border);
+            display: flex; justify-content: space-between; align-items: center;
         }
 
-        button {
-            padding: 10px 20px;
-            border-radius: 25px;
-            border: none;
-            margin-left: 10px;
-            background: orange;
+        .Chat { 
+            flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; 
+            border-left: 3px solid var(--primary-glow);
+            box-shadow: inset 15px 0 30px -15px var(--primary-glow);
+            scrollbar-color: black;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.498) transparent; /* thumb track */
+        }
+
+    footer {
+        background: black;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+
+        .Message {
+            max-width: 80%; padding: 14px 18px; border-radius: 18px;
+            line-height: 1.5; animation: msgIn 0.3s ease-out;
+            position: relative;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.498) transparent; /* thumb track */
+        }
+
+        @keyframes msgIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .User { align-self: flex-end; background: var(--primary-glow); color: white; border-bottom-right-radius: 2px; }
+        
+        .AI { 
+            align-self: flex-start; background: var(--chat-bg); 
+            border: 1px solid var(--glass-border); 
+            border-left: 5px solid var(--primary-glow); 
+            border-bottom-left-radius: 2px;
+        }
+
+        .ThinkingPulse { animation: pulseGlow 1.5s infinite; }
+        @keyframes pulseGlow {
+            0% { border-left-color: var(--primary-glow); opacity: 1; }
+            50% { border-left-color: white; opacity: 0.6; }
+            100% { border-left-color: var(--primary-glow); opacity: 1; }
+        }
+
+        .QuickBtn {
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid var(--primary-glow);
+            color: var(--text-main); 
+            padding: 8px 15px; 
+            border-radius: 20px;
+            cursor: pointer; 
+            margin: 5px 5px 0 0; 
+            font-size: 13px; 
             font-weight: bold;
-            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .results {
-            margin-top: 40px;
-            width: 60%;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: left;
+
+        .QuickBtn:hover {
+            background: var(--primary-glow);
+            color: white;
+            box-shadow: 0 0 15px var(--primary-glow);
+            transform: translateY(-2px);
+        }
+        .SideBarButtons {
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid var(--primary-glow);
+            color: var(--text-main); 
+            padding: 8px 15px; 
+            border-radius: 20px;
+            cursor: pointer; 
+            margin: 5px 5px 0 0; 
+            font-size: 13px; 
+            font-weight: bold;
+            transition: all 0.3s ease;
+
+
+        }
+        .SideBarButtons:hover {
+            background: var(--primary-glow);
+            color: white;
+            box-shadow: 0 0 15px var(--primary-glow);
+            transform: translateY(-2px);
+        }
+        .InputArea { padding: 20px; display: flex; gap: 10px; }
+        input[type="text"] {
+            flex: 1; padding: 15px 20px; border-radius: 25px;
+            border: 1px solid var(--glass-border); background: var(--chat-bg); color: var(--text-main); outline: none;
+        }
+        input:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        .SendBtn {            background: rgba(255,255,255,0.05); 
+            border: 1px solid var(--primary-glow);
+            color: var(--text-main); 
+            padding: 8px 15px; 
+            border-radius: 20px;
+            cursor: pointer; 
+            margin: 5px 5px 0 0; 
+            font-size: 13px; 
+            font-weight: bold;
+            transition: all 0.3s ease;}
+        .SendBtn:hover {
+            background: var(--primary-glow);
+            color: white;
+            box-shadow: 0 0 15px var(--primary-glow);
+
+        }
+        .SendBtn {            
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid var(--primary-glow);
+            color: var(--text-main); 
+            padding: 8px 15px; 
+            border-radius: 20px;
+            cursor: pointer; 
+            margin: 5px 5px 0 0; 
+            font-size: 13px; 
+            font-weight: bold;
+            transition: all 0.3s ease;}
+        .SendBtn:hover {
+            background: var(--primary-glow);
+            color: white;
+            box-shadow: 0 0 15px var(--primary-glow);
+
+        }
+        .StopBtn { 
+            padding: 0 15px; 
+            border-radius: 25px; 
+            border: none; 
+            background: #40404036; 
+            color: white; 
+            cursor: pointer; 
+            display: none; 
+            font-weight: bold; 
+        }
+        .StopBtn:hover {
+            background: red;
+            color: white;
+            box-shadow: 0 0 15px red;
+
         }
 
-        .result-item {
-            margin-bottom: 25px;
+        /* MODAL OVERLAYS */
+        .ModalContainer {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px); z-index: 9999; align-items: center; justify-content: center;
         }
+.SettingsBox, .InfoBox, .VersonBox {
+    background: var(--chat-bg);
+    padding: 25px;
+    border-radius: 20px;
+    border: 2px solid var(--primary-glow);
+    width: 320px;
 
-        a {
-            color: #8ab4f8;
-            font-size: 18px;
-            text-decoration: none;
+    /* Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.498) transparent; /* thumb track */
+}
+        
+        /* CLOSE BUTTON FOR INFO/LOG */
+        .CloseBtn {
+            width: 100%; padding: 10px; margin-top: 15px; border-radius: 20px;
+            border: 1px solid var(--primary-glow); background: transparent;
+            color: var(--text-main); cursor: pointer; font-weight: bold;
         }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        p {
-            color: #ccc;
-        }
+        .CloseBtn:hover { background: var(--primary-glow); color: white; }
     </style>
 </head>
 <body>
 
-    <h1>🔍 Mini Search Engine</h1>
-
-    <form method="POST">
-        <input type="text" name="query" placeholder="Search anything..." value="{{ query }}" required>
-        <button type="submit">Search</button>
-    </form>
-
-    <div class="results">
-        {% for result in results %}
-            <div class="result-item">
-                <a href="{{ result.link }}" target="_blank">{{ result.title }}</a>
-                <p>{{ result.snippet }}</p>
-            </div>
-        {% endfor %}
+<div id="settingsModal" class="ModalContainer">
+    <div class="SettingsBox">
+        <h3>AI Settings</h3>
+        <label>Theme</label>
+        <select id="themeMode" onchange="changeTheme(this.value)" style="width:100%; padding:8px; margin-bottom:15px;">
+            <option value="dark">Dark Mode</option>
+            <option value="light">Light Mode</option>
+        </select>
+        <label>Glow Color</label>
+        <input type="color" id="colorPicker" style="width:100%; height:35px; margin-bottom:15px;" oninput="changeGlow(this.value)">
+        <label>Intelligence Mode</label>
+        <select id="speedMode" style="width:100%; padding:8px; margin-bottom:20px;">
+            <option value="200">Fast Mode</option>
+            <option value="1200" selected>Normal Mode</option>
+            <option value="4000">Deep Think Mode</option>
+        </select>
+        <button class="SideBarButtons" style="width:100%;" onclick="closeModal('settingsModal')">Save</button>
     </div>
+</div>
+
+<div id="infoModal" class="ModalContainer">
+    <div class="InfoBox">
+        <h3>About Net AI</h3>
+        <p><b>Net AI</b> is a lightweight logical assistant built for high-speed performance.</p>
+        <p>Built by: <b>Aaradhya</b></p>
+        <button class="CloseBtn" onclick="closeModal('infoModal')">Close</button>
+    </div>
+</div>
+
+<div id="versonModal" class="ModalContainer">
+    <div class="VersonBox">
+        <h3>Update Log</h3>
+        <div style="font-size: 13px; text-align: left; max-height: 200px; overflow-y: auto;">
+            <p><b>v0.1.1<i> New!</i></b><br>+ Html creation V2 + UI update was added</p>
+            <p><b>v0.1.0</b><br>+ Html creation were added</p></p>
+            <p><b>v0.0.9</b><br>+ Ai rebuild</p>
+            <p><b>v0.0.8</b><br>+ Added Info and Version boxes<br>+ Added Close buttons<br>+ Sidebar links fixed</p>
+            <p><b>v0.0.7</b><br>+ Added Hover Glow buttons<br>+ Geometry & Algebra logic added</p>
+            <p><b>v0.0.5 - 6</b><br>+ Settings were completed</p>
+            <p><b>v0.0.4</b><br>+ Light mode added</p>
+            <p><b>v0.0.3</b><br>+ Fast mode added</p>
+            <p><b>v0.0.2</b><br>+ Ui changed</p>
+            <p><b>v0.0.1</b><br>+ Net AI Core release</p>
+        </div>
+        <button class="CloseBtn" onclick="closeModal('versonModal')">Close</button>
+    </div>
+</div>
+
+<div class="SideBar">
+    <h2>NET AI</h2>
+    <p class="SideBarButtons" onclick="openModal('infoModal')">⚡About Net ai</p>
+    <p class="SideBarButtons" onclick="openModal('versonModal')">⚡Update Log</p>
+    <hr width="90%">
+    <div id="sidebar-version" style="margin-top:auto; font-size:12px; opacity:0.6;"></div>
+</div>
+
+<div class="Main">
+    <div class="TopBar">
+        <div id="topbar-text" class="TopBarText">Net AI</div>
+        <button class="SettingsTag" onclick="openModal('settingsModal')" style="background:none; border:none; cursor:pointer; font-size:20px;">⚙️</button>
+    </div>
+    <div class="Chat" id="chat"></div>
+    <div class="InputArea">
+        <input id="input" type="text" placeholder="Ask Net AI..." onkeydown="if(event.key==='Enter')send()">
+        <button id="sendBtn" class="SendBtn" onclick="send()" style="display: flex; align-items: center; gap: 8px;">
+    <span>SEND</span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"></line>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+    </svg>
+</button>
+        <button id="stopBtn" class="StopBtn" onclick="stopAI()">STOP ⏹</button>
+    </div>
+</div>
+
+<script>
+    const NET_VERSION = "0.1.1"; 
+
+    const messages = document.getElementById("messages");
+    const input = document.getElementById("input");
+    const sendBtn = document.getElementById("sendBtn");
+    const stopBtn = document.getElementById("stopBtn");
+
+    let isThinking = false;
+    let aiTimeout = null;
+
+    function add(text, cls) {
+        const div = document.createElement("div");
+        div.className = cls;
+        div.innerHTML = text;
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+        return div;
+    }
+
+    function addThinking() {
+        const div = document.createElement("div");
+        div.className = "bot ThinkingPulse";
+        div.id = "thinking";
+        div.innerHTML = "Thinking...";
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+        return div.id;
+    }
+
+    function formatResults(results) {
+        if (!results || results.length === 0) {
+            return "No results found.";
+        }
+
+        return results.map(r => `
+            <div style="margin-bottom:12px">
+                🔗 <a href="${r.link}" target="_blank"><b>${r.title}</b></a><br>
+                <span style="opacity:0.7;font-size:12px">${r.snippet}</span>
+            </div>
+        `).join("");
+    }
+
+    function send() {
+        const text = input.value.trim();
+        if (!text || isThinking) return;
+
+        add(text, "user");
+        input.value = "";
+        input.disabled = true;
+
+        const typingId = addThinking();
+        isThinking = true;
+
+        sendBtn.style.display = "none";
+        stopBtn.style.display = "block";
+
+        // 🔥 CALL FLASK BACKEND
+        fetch("https://YOUR-RENDER-URL.onrender.com/?query=" + encodeURIComponent(text), {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: "query=" + encodeURIComponent(text)
+        })
+        .then(res => res.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+            const resultDivs = doc.querySelectorAll(".result");
+
+            let results = [];
+            resultDivs.forEach(div => {
+                const title = div.querySelector("a")?.innerText;
+                const link = div.querySelector("a")?.href;
+                const snippet = div.querySelector("p")?.innerText;
+                results.push({ title, link, snippet });
+            });
+
+            const botMessage = document.getElementById(typingId);
+            if (botMessage) {
+                botMessage.classList.remove("ThinkingPulse");
+                botMessage.innerHTML = formatResults(results);
+            }
+        })
+        .catch(() => {
+            const botMessage = document.getElementById(typingId);
+            if (botMessage) {
+                botMessage.classList.remove("ThinkingPulse");
+                botMessage.innerHTML = "⚠️ Failed to reach AI server.";
+            }
+        })
+        .finally(() => {
+            isThinking = false;
+            input.disabled = false;
+            sendBtn.style.display = "block";
+            stopBtn.style.display = "none";
+        });
+    }
+
+    function stopThinking() {
+        if (!isThinking) return;
+
+        clearTimeout(aiTimeout);
+        const thinkingDiv = document.getElementById("thinking");
+        if (thinkingDiv) {
+            thinkingDiv.classList.remove("ThinkingPulse");
+            thinkingDiv.innerHTML = "⏹️ Stopped.";
+        }
+
+        isThinking = false;
+        input.disabled = false;
+        sendBtn.style.display = "block";
+        stopBtn.style.display = "none";
+    }
+
+    input.addEventListener("keypress", e => {
+        if (e.key === "Enter") send();
+    });
+</script>
 
 </body>
 </html>
