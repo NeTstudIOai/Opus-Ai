@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Net ai | Website maker</title>
+<title>NetStudioAi | Website maker</title>
 <link rel="stylesheet" href="Style.css">
-<link rel="icon" type="image/png" href="https://github.com/NeTstudIOai/Opus-Ai/blob/main/NET%20(2).png?raw=true">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body class="dark">
@@ -23,10 +22,9 @@
     <h2>NetStudio<span>AI</span></h2>
     </div>
     <div class="nav-links">
-        <a href="#">Dashbord</a>
+        <a href="#">Chat</a>
         <a href="#Information">Information</a>
-        <a href="#Documantation">Documantation</a>
-        <a href="#Versons" style="margin-right:0;">Versons</a>
+        <a href="#about">Documentation</a>
     </div>
 </nav>
 
@@ -34,9 +32,9 @@
 
 <div class="hero">
     <div class="hero-content">
-        <h1>NetStudioAi</h1>
+        <h1>NetStudio<span>Ai</span></h1>
         <p>Create Your Own Website</p>
-            <button class="Goldenbtn">Coming soon...✨</button>
+            <button onclick='location.href ="https://opus-ai-uprb.onrender.com/"'  class="Goldenbtn">Chat✨</button> 
     </div>
 </div>
 
@@ -72,7 +70,7 @@ Just choose what you want, customize the design, and build a website that fits y
 
 <section class="button-area">
     <button class="btn">ℹ|Information</button>
-    <button class="btn">Documantation</button>
+    <button class="btn">Documentation </button>
     <button class="btn" onclick="location.hash ='feedback'">⚠|Report Bug</button>
     <button class="btn">🜲|Upgrade</button>
 </section>
@@ -118,12 +116,11 @@ Just choose what you want, customize the design, and build a website that fits y
     margin: 0;
     flex: 1;
     text-align: center;
-    color: rgb(115, 81, 255);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   ">
-    NetStudioAi
+    NetStudio<span>Ai</span>
   </h1>
 
   <!-- RIGHT IMAGE -->
@@ -150,9 +147,9 @@ Just choose what you want, customize the design, and build a website that fits y
 </body>
 
 
-<div class="Container">
+<div id="Information" class="Container">
     <div class="CenterBord">
-        <h1><b>🔎About Opus AI🔎</b></h1>
+        <h1><b>🔎About NetStudioAi🔎</b></h1>
         <p>This is a website which provides a ai that helps you make html code, It runs on <b>Net-AI's assistance.</b></p>
     </div>
 
@@ -168,21 +165,29 @@ Just choose what you want, customize the design, and build a website that fits y
     
 </div>
 
-<section class="info" id="redeem" style="margin-top:20px;">
+<section  id="redeem">
+  <div class="feedback-wrapper">
 
+    <!-- LEFT IMAGE -->
+    <div class="feedback-image">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHsnPrnr2ybgZ0qb3PJhAP0iLIv7pjZnjO2A&s" alt="preview">
+    </div>
+
+    <!-- RIGHT PANEL -->
     <div class="FeedBackDiv">
-
-    <h2>Send Feedback!</h2>
-    <p>Enter your feedback below. After entering, Press send button below.</p>
-    <div style="margin-top:20px;">
-        <input type="text" id="feedback" placeholder="Enter feedback" style="padding:15px 20px;border-radius:12px;border:none;font-size:1.1rem;width:260px;max-width:80%;">
+      <h2>Send Feedback!</h2>
+      <p>Enter your feedback below. After entering, press the send button.</p>
+      <div style="margin-top:20px;">
+        <input type="text" id="feedback" placeholder="Enter feedback"
+        class="InputFeedback">
         <br><br>
-        <img style="position: absolute; transform: translateX(-150%) translateY(-65%); opacity: .1;" src="https://github.com/NeTstudIOai/Opus-Ai/blob/main/NET%20(2).png?raw=true" alt="" height="50%" width="25%">
-        <img style="position: absolute; transform: translateX(125%) translateY(-65%); opacity: .1;" src="https://github.com/NeTstudIOai/Opus-Ai/blob/main/NET%20(2).png?raw=true" alt="" height="50%" width="25%">
-        <button class="btn" onclick="sendFeedback()" style="width:200px;height:70px;font-size:1.1rem;">Send</button>
+        <button class="FeedBackBtn" onclick="sendFeedback()" style="width:200px;height:70px;font-size:1.1rem;">Submit</button>
+      </div>
     </div>
-    </div>
+
+  </div>
 </section>
+
 
 <div class="links">
     <a href="#"><i class="fa-brands fa-discord"></i> Discord</a>
@@ -280,5 +285,3 @@ function sendFeedback() {
 
 </body>
 </html>
-
-
