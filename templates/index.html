@@ -309,67 +309,189 @@
 </div>
 
 <script>
-/* === Net AI Browser Search Attachment (Non-invasive) === */
+const NET_VERSION = "0.1.1"; 
 
-(function () {
-    // Wait until original script is loaded
-    const originalSend = window.send;
+const chat = document.getElementById("chat");
+const input = document.getElementById("input");
+const sendBtn = document.getElementById("sendBtn");
+const stopBtn = document.getElementById("stopBtn");
 
-    if (!originalSend) return;
+let aiTimeout;
+let isThinking = false;
+let lastMsg = "";
+let repeatCount = 0;
 
-    window.send = async function () {
-        // Capture user query BEFORE original send clears input
-        const queryText = input.value.trim();
+window.onload = () => {
+    document.getElementById("tab-title").innerText = `Net AI | ${NET_VERSION}`;
+    document.getElementById("topbar-text").innerHTML = `
+        <img src="https://raw.githubusercontent.com/NeTstudIOai/Net-ai/main/NetAiPng.png"
+             height="25" width="25" alt="Net AI"
+             style="vertical-align: middle; margin-right: 6px;">
+        Net AI | v${NET_VERSION}
+    `;
+    document.getElementById("sidebar-version").innerText = `By Aaradhya v${NET_VERSION}`;
 
-        // Call your original AI logic
-        originalSend();
+    const savedGlow = localStorage.getItem("netAiGlow") || "#ff924a";
+    const savedTheme = localStorage.getItem("netAiTheme") || "dark";
+    changeGlow(savedGlow);
+    changeTheme(savedTheme);
+    welcomeMessage();
+};
 
-        // Get the thinking speed to sync timing
-        const speedSelect = document.getElementById("speedMode");
-        const delay = parseInt(speedSelect?.value || 1000) + 50;
+function welcomeMessage() {
+    add(`<b>👋 Net AI v${NET_VERSION}</b><br>Pick a catagory to start with!
+        <div style="margin-top:10px">
+            <button class="QuickBtn" onclick="quickAsk('Maths')">Maths</button>
+            <button class="QuickBtn" onclick="quickAsk('Geometry')">Geometry</button>
+            <button class="QuickBtn" onclick="quickAsk('Algebra')">Algebra</button>
+        </div>`, "AI");
+}
 
-        // After AI finishes typing, fetch browser results
-        setTimeout(async () => {
+function openModal(id) { document.getElementById(id).style.display = "flex"; }
+function closeModal(id) { document.getElementById(id).style.display = "none"; }
+
+function quickAsk(topic) { 
+    input.value = "Tell me about " + topic; 
+    send(); 
+}
+
+function changeGlow(color) {
+    document.documentElement.style.setProperty('--primary-glow', color);
+    localStorage.setItem("netAiGlow", color);
+}
+
+function changeTheme(mode) {
+    document.body.setAttribute("data-theme", mode);
+    localStorage.setItem("netAiTheme", mode);
+}
+
+function stopAI() {
+    clearTimeout(aiTimeout);
+    isThinking = false;
+    input.disabled = false;
+    sendBtn.style.display = "block";
+    stopBtn.style.display = "none";
+    const thinking = document.querySelector(".ThinkingPulse");
+    if(thinking) {
+        thinking.innerHTML = "<i>Process halted.</i>";
+        thinking.classList.remove("ThinkingPulse");
+    }
+}
+
+async function send() {
+    const text = input.value.trim();
+    if (!text || isThinking) return;
+
+    if (text.toLowerCase() === lastMsg.toLowerCase()) repeatCount++;
+    else { repeatCount = 0; lastMsg = text; }
+
+    isThinking = true;
+    input.disabled = true;
+    sendBtn.style.display = "none";
+    stopBtn.style.display = "block";
+
+    add(text, "User");
+    input.value = "";
+
+    const speedSelect = document.getElementById("speedMode");
+    const speed = parseInt(speedSelect.value);
+    const mode = speedSelect.options[speedSelect.selectedIndex].text;
+
+    const typingId = "typing_" + Date.now();
+    add(`Thinking (${mode})...`, "AI ThinkingPulse", typingId);
+
+    // 🧠 Your original AI reply
+    aiTimeout = setTimeout(async () => {
+        const botMessage = document.getElementById(typingId);
+        if (botMessage) {
+            botMessage.classList.remove("ThinkingPulse");
+
+            let aiAnswer = reply(text, mode);
+
+            // 🌐 NEW: Fetch browser results (backend)
+            let browserHTML = "";
             try {
                 const res = await fetch("/search", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ query: queryText })
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({ query: text })
                 });
-
                 const data = await res.json();
-                if (!data || data.length === 0) return;
 
-                // Find the last AI message (the reply just generated)
-                const aiMessages = document.querySelectorAll(".Message.AI");
-                const lastAI = aiMessages[aiMessages.length - 1];
-                if (!lastAI) return;
-
-                // Build browser results UI
-                let html = `<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.1)">
-                                <b>🌐 Browser Results:</b><br>`;
-                data.forEach(r => {
-                    html += `
-                        <div style="margin:6px 0">
-                            🔗 <a href="${r.link}" target="_blank">${r.title}</a>
-                            <div style="font-size:12px;opacity:0.7">${r.snippet}</div>
-                        </div>`;
-                });
-                html += "</div>";
-
-                // Append results without altering original reply
-                lastAI.innerHTML += html;
-
-            } catch (e) {
-                console.warn("Browser search failed:", e);
+                if (data.length > 0) {
+                    browserHTML = `<div style="margin-top:10px;border-top:1px solid #333;padding-top:8px;">
+                        <b>🌐 Browser Results:</b><br>` +
+                        data.map(r => 
+                            `<div style="margin:6px 0">
+                                <a href="${r.link}" target="_blank">${r.title}</a>
+                                <div style="font-size:12px;opacity:0.8">${r.snippet}</div>
+                            </div>`
+                        ).join("") +
+                        `</div>`;
+                }
+            } catch(e) {
+                browserHTML = `<div style="opacity:0.6;margin-top:8px;">(Browser search failed)</div>`;
             }
-        }, delay);
-    };
-})();
+
+            botMessage.innerHTML = aiAnswer + browserHTML;
+        }
+
+        isThinking = false;
+        input.disabled = false;
+        sendBtn.style.display = "block";
+        stopBtn.style.display = "none";
+        chat.scrollTop = chat.scrollHeight;
+    }, speed);
+}
+
+function add(text, type, id = "") {
+    const div = document.createElement("div");
+    div.className = "Message " + type;
+    if (id) div.id = id;
+    div.innerHTML = text;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+/* ⬇️⬇️⬇️ EVERYTHING BELOW IS 100% YOUR ORIGINAL REPLY ENGINE (UNCHANGED) ⬇️⬇️⬇️ */
+function reply(msg, mode) {
+    let lower = msg.toLowerCase().replace(/[?!.]/g, "");
+    let d = new Date();
+
+    if (repeatCount === 1) return "I just told you that! But fine...";
+    if (repeatCount >= 2) return "Stop repeating! My circuits are getting tired. 😫";
+
+    if (lower.includes("roblox")) return "<b>Search Result:</b> <a href='https://roblox.com' target='_blank'>roblox.com</a><i>It is a plateform targeted to share <b>Experiences</b></i>";
+    if (lower.includes("youtube")) return "<b>Search Result:</b> <a href='https://youtube.com' target='_blank'>youtube.com</a><i>It is a plateform targeted to share <b>Content/Videos/Shorts/Posts/Polls</b></i>";
+    if (lower.includes("facebook")) return "<b>Search Result:</b> <a href='https://facebook.com' target='_blank'>facebook.com</a><i>It is a plateform targeted to share <b>Shorts/Posts</b></i>";
+    if (lower.includes("instagram")) return "<b>Search Result:</b> <a href='https://instagram.com' target='_blank'>instagram.com</a><i>It is a plateform targeted to share <b>Posts/Stories</b></i>";
+    if (lower.includes("whatsapp")) return "<b>Search Result:</b> <a href='https://whatsapp.com' target='_blank'>whatsapp.com</a><i>It is a plateform targeted to <b>Communicate</b></i>";
+    
+    if (lower.includes("version")) return `Currently running on <b>Net AI v${NET_VERSION}</b>.`;
+    if (lower.includes("made you")) return "I'm made in Visual Studio Code by Aaradhya.";
+    if (lower.includes("hi") || lower.includes("hello")) return "Hello! How can I assist you with math or logic today?";
+
+    if (lower.includes("date") || lower.includes("today")) {
+        return `📅 Today is <b>${d.toDateString()}</b>.`;
+    }
+
+    let mathExp = lower.replace("pie", Math.PI).replace("pi", Math.PI).replace(/[^-e0-9+*/().^]/g, "");
+    if (mathExp && /[\d]/.test(mathExp)) {
+        try {
+            const res = new Function(`return ${mathExp.replace('^', '**')}`)();
+            if (mode.includes("Deep")) return `<b>Analysis:</b> ${mathExp} <br> 🧮 <b>Answer:</b> ${res}`;
+            return `🧮 <b>Result:</b> ${res}`;
+        } catch (e) { }
+    }
+
+    return "I'm still learning that. Try asking a different question!";
+}
 </script>
+
 
 
 </body>
 </html>
+
 
 
