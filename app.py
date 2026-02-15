@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from ddgs import DDGS
 import os
 
@@ -17,6 +17,7 @@ def search_internet(query, max_results=5):
     return results_data
 
 
+# === HTML page route (your original) ===
 @app.route("/", methods=["GET", "POST"])
 def home():
     results = []
@@ -27,6 +28,15 @@ def home():
         results = search_internet(query)
 
     return render_template("index.html", results=results, query=query)
+
+
+# === NEW: API route for JS fetch() ===
+@app.route("/search", methods=["POST"])
+def search_api():
+    data = request.get_json()
+    query = data.get("query", "")
+    results = search_internet(query)
+    return jsonify(results)
 
 
 if __name__ == "__main__":
