@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="tab-title">Net AI</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/NeTstudIOai/Net-ai/main/NetAiPng.png" type="image/png">
+    <title id="tab-title">NetStudioAI | Chat</title>
+    <link rel="icon" href="https://github.com/NeTstudIOai/Opus-Ai/blob/main/NET%20(2).png?raw=true" type="image/png">
     <style>
         :root {
             --primary-glow: #9900ff;
@@ -255,9 +255,9 @@
 
 <div id="infoModal" class="ModalContainer">
     <div class="InfoBox">
-        <h3>About Net AI</h3>
+        <h3>About AI</h3>
         <p><b>Net AI</b> is a lightweight logical assistant built for high-speed performance.</p>
-        <p>Built by: <b>Aaradhya</b></p>
+        <p>Built by: <b>NetStudioAi</b></p>
         <button class="CloseBtn" onclick="closeModal('infoModal')">Close</button>
     </div>
 </div>
@@ -266,15 +266,6 @@
     <div class="VersonBox">
         <h3>Update Log</h3>
         <div style="font-size: 13px; text-align: left; max-height: 200px; overflow-y: auto;">
-            <p><b>v0.1.1<i> New!</i></b><br>+ Html creation V2 + UI update was added</p>
-            <p><b>v0.1.0</b><br>+ Html creation were added</p></p>
-            <p><b>v0.0.9</b><br>+ Ai rebuild</p>
-            <p><b>v0.0.8</b><br>+ Added Info and Version boxes<br>+ Added Close buttons<br>+ Sidebar links fixed</p>
-            <p><b>v0.0.7</b><br>+ Added Hover Glow buttons<br>+ Geometry & Algebra logic added</p>
-            <p><b>v0.0.5 - 6</b><br>+ Settings were completed</p>
-            <p><b>v0.0.4</b><br>+ Light mode added</p>
-            <p><b>v0.0.3</b><br>+ Fast mode added</p>
-            <p><b>v0.0.2</b><br>+ Ui changed</p>
             <p><b>v0.0.1</b><br>+ Net AI Core release</p>
         </div>
         <button class="CloseBtn" onclick="closeModal('versonModal')">Close</button>
@@ -282,7 +273,12 @@
 </div>
 
 <div class="SideBar">
-    <h2>NET AI</h2>
+    <div style="display: flex; flex-direction: row; align-items: center; background-image: linear-gradient(to right,rgba(255, 255, 255, 0.231),rgba(0, 0, 0, 0)); border-radius: 25px; padding-left: 5px;">
+            <img src="https://github.com/NeTstudIOai/Opus-Ai/blob/main/NET%20(2).png?raw=true"
+             height="25" width="25" alt="Net AI"
+             style="vertical-align: middle; margin-right: 6px;">
+    <h2>NetStudioAi</h2>
+    </div>
     <p class="SideBarButtons" onclick="openModal('infoModal')">⚡About Net ai</p>
     <p class="SideBarButtons" onclick="openModal('versonModal')">⚡Update Log</p>
     <hr width="90%">
@@ -309,7 +305,7 @@
 </div>
 
 <script>
-const NET_VERSION = "0.1.1"; 
+const NET_VERSION = "0.0.1"; 
 
 const chat = document.getElementById("chat");
 const input = document.getElementById("input");
@@ -322,14 +318,13 @@ let lastMsg = "";
 let repeatCount = 0;
 
 window.onload = () => {
-    document.getElementById("tab-title").innerText = `Net AI | ${NET_VERSION}`;
     document.getElementById("topbar-text").innerHTML = `
         <img src="https://raw.githubusercontent.com/NeTstudIOai/Net-ai/main/NetAiPng.png"
              height="25" width="25" alt="Net AI"
              style="vertical-align: middle; margin-right: 6px;">
         Net AI | v${NET_VERSION}
     `;
-    document.getElementById("sidebar-version").innerText = `By Aaradhya v${NET_VERSION}`;
+    document.getElementById("sidebar-version").innerText = `By NetStudioAi v${NET_VERSION}`;
 
     const savedGlow = localStorage.getItem("netAiGlow") || "#ff924a";
     const savedTheme = localStorage.getItem("netAiTheme") || "dark";
@@ -466,9 +461,8 @@ function reply(msg, mode) {
     if (lower.includes("facebook")) return "<b>Search Result:</b> <a href='https://facebook.com' target='_blank'>facebook.com</a><i>It is a plateform targeted to share <b>Shorts/Posts</b></i>";
     if (lower.includes("instagram")) return "<b>Search Result:</b> <a href='https://instagram.com' target='_blank'>instagram.com</a><i>It is a plateform targeted to share <b>Posts/Stories</b></i>";
     if (lower.includes("whatsapp")) return "<b>Search Result:</b> <a href='https://whatsapp.com' target='_blank'>whatsapp.com</a><i>It is a plateform targeted to <b>Communicate</b></i>";
-    
     if (lower.includes("version")) return `Currently running on <b>Net AI v${NET_VERSION}</b>.`;
-    if (lower.includes("made you")) return "I'm made in Visual Studio Code by Aaradhya.";
+    if (lower.includes("made you")) return "by NetStudioAi";
     if (lower.includes("hi") || lower.includes("hello")) return "Hello! How can I assist you with math or logic today?";
 
     if (lower.includes("date") || lower.includes("today")) {
@@ -492,6 +486,7 @@ function reply(msg, mode) {
 
 </body>
 </html>
+
 
 
 
