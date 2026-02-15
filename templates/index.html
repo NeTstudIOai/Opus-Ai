@@ -309,140 +309,67 @@
 </div>
 
 <script>
-    const NET_VERSION = "0.1.1"; 
+/* === Net AI Browser Search Attachment (Non-invasive) === */
 
-    const messages = document.getElementById("messages");
-    const input = document.getElementById("input");
-    const sendBtn = document.getElementById("sendBtn");
-    const stopBtn = document.getElementById("stopBtn");
+(function () {
+    // Wait until original script is loaded
+    const originalSend = window.send;
 
-    let isThinking = false;
-    let aiTimeout = null;
+    if (!originalSend) return;
 
-    function add(text, cls) {
-        const div = document.createElement("div");
-        div.className = cls;
-        div.innerHTML = text;
-        messages.appendChild(div);
-        messages.scrollTop = messages.scrollHeight;
-        return div;
-    }
+    window.send = async function () {
+        // Capture user query BEFORE original send clears input
+        const queryText = input.value.trim();
 
-    function addThinking() {
-        const div = document.createElement("div");
-        div.className = "bot ThinkingPulse";
-        div.id = "thinking";
-        div.innerHTML = "Thinking...";
-        messages.appendChild(div);
-        messages.scrollTop = messages.scrollHeight;
-        return div.id;
-    }
+        // Call your original AI logic
+        originalSend();
 
-    function formatResults(results) {
-        if (!results || results.length === 0) {
-            return "No results found.";
-        }
+        // Get the thinking speed to sync timing
+        const speedSelect = document.getElementById("speedMode");
+        const delay = parseInt(speedSelect?.value || 1000) + 50;
 
-        return results.map(r => `
-            <div style="margin-bottom:12px">
-                🔗 <a href="${r.link}" target="_blank"><b>${r.title}</b></a><br>
-                <span style="opacity:0.7;font-size:12px">${r.snippet}</span>
-            </div>
-        `).join("");
-    }
+        // After AI finishes typing, fetch browser results
+        setTimeout(async () => {
+            try {
+                const res = await fetch("/search", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ query: queryText })
+                });
 
-async function send() {
-    const text = input.value.trim();
-    if (!text || isThinking) return;
+                const data = await res.json();
+                if (!data || data.length === 0) return;
 
-    if (text.toLowerCase() === lastMsg.toLowerCase()) repeatCount++;
-    else { repeatCount = 0; lastMsg = text; }
+                // Find the last AI message (the reply just generated)
+                const aiMessages = document.querySelectorAll(".Message.AI");
+                const lastAI = aiMessages[aiMessages.length - 1];
+                if (!lastAI) return;
 
-    isThinking = true;
-    input.disabled = true;
-    sendBtn.style.display = "none";
-    stopBtn.style.display = "block";
+                // Build browser results UI
+                let html = `<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.1)">
+                                <b>🌐 Browser Results:</b><br>`;
+                data.forEach(r => {
+                    html += `
+                        <div style="margin:6px 0">
+                            🔗 <a href="${r.link}" target="_blank">${r.title}</a>
+                            <div style="font-size:12px;opacity:0.7">${r.snippet}</div>
+                        </div>`;
+                });
+                html += "</div>";
 
-    add(text, "User");
-    input.value = "";
+                // Append results without altering original reply
+                lastAI.innerHTML += html;
 
-    const typingId = "typing_" + Date.now();
-    add(`Thinking...`, "AI ThinkingPulse", typingId);
-
-    try {
-        // 🔥 Call Flask backend search
-        const response = await fetch("/search", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query: text })
-        });
-
-        const results = await response.json();
-
-        const botMessage = document.getElementById(typingId);
-        botMessage.classList.remove("ThinkingPulse");
-
-        let browserResults = "";
-        if (results.length > 0) {
-            browserResults = "<br><br><b>🌐 Browser Results:</b><br>";
-            results.forEach(r => {
-                browserResults += `
-                    <div style="margin:8px 0">
-                        🔗 <a href="${r.link}" target="_blank">${r.title}</a>
-                        <div style="font-size:12px;opacity:0.7">${r.snippet}</div>
-                    </div>`;
-            });
-        }
-
-        botMessage.innerHTML = reply(text, "Normal") + browserResults;
-
-    } catch (err) {
-        const botMessage = document.getElementById(typingId);
-        botMessage.innerHTML = "⚠️ Error fetching browser results.";
-    }
-
-    isThinking = false;
-    input.disabled = false;
-    sendBtn.style.display = "block";
-    stopBtn.style.display = "none";
-}
-
-        .catch(() => {
-            const botMessage = document.getElementById(typingId);
-            if (botMessage) {
-                botMessage.classList.remove("ThinkingPulse");
-                botMessage.innerHTML = "⚠️ Failed to reach AI server.";
+            } catch (e) {
+                console.warn("Browser search failed:", e);
             }
-        })
-        .finally(() => {
-            isThinking = false;
-            input.disabled = false;
-            sendBtn.style.display = "block";
-            stopBtn.style.display = "none";
-        });
-    }
-
-    function stopThinking() {
-        if (!isThinking) return;
-
-        clearTimeout(aiTimeout);
-        const thinkingDiv = document.getElementById("thinking");
-        if (thinkingDiv) {
-            thinkingDiv.classList.remove("ThinkingPulse");
-            thinkingDiv.innerHTML = "⏹️ Stopped.";
-        }
-
-        isThinking = false;
-        input.disabled = false;
-        sendBtn.style.display = "block";
-        stopBtn.style.display = "none";
-    }
-
-    input.addEventListener("keypress", e => {
-        if (e.key === "Enter") send();
-    });
+        }, delay);
+    };
+})();
 </script>
+
 
 </body>
 </html>
+
 
